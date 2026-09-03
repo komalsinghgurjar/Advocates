@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>
+Allahabad High Court Advocate Directory
+</title>
+
+<meta
+name="description"
+content="Search advocates listed in publicly available Allahabad High Court roll records."
+>
+
+<meta name="color-scheme" content="light dark">
+
+<style>
+
+:root{
+    --bg:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --link:#2563eb;
+    --hero:#fafafa;
+}
+
+@media (prefers-color-scheme: dark){
+
+:root{
+    --bg:#0f172a;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --border:#1e293b;
+    --link:#60a5fa;
+    --hero:#111827;
+}
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,sans-serif;
+    line-height:1.7;
+}
+
+a{
+    color:var(--link);
+    text-decoration:none;
+}
+
+.wrapper{
+    max-width:1100px;
+    margin:auto;
+    padding:0 24px;
+}
+
+.hero{
+    background:var(--hero);
+    border-bottom:1px solid var(--border);
+}
+
+.hero-inner{
+    padding:80px 0;
+}
+
+.hero h1{
+    font-size:48px;
+    margin-bottom:16px;
+}
+
+.hero p{
+    color:var(--muted);
+}
+
+.stats{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:600;
+}
+
+.search{
+    margin-top:40px;
+}
+
+.search input{
+    width:100%;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.results{
+    margin-top:15px;
+}
+
+.result{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+.result small{
+    color:var(--muted);
+    display:block;
+}
+
+.footer{
+    border-top:1px solid var(--border);
+    margin-top:60px;
+    padding:30px 0;
+    color:var(--muted);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="hero">
+
+<div class="wrapper">
+
+<div class="hero-inner">
+
+<h1>
+Allahabad High Court Advocates Directory
+</h1>
+
+<p>
+Search advocate from publicly available records.
+</p>
+
+<div class="stats">
+31123 Advocates listed.
+</div>
+
+<div class="search">
+
+<input
+id="search"
+type="text"
+placeholder="Search by name or roll number..."
+autocomplete="off"
+>
+
+<div id="results" class="results"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<div class="wrapper">
+
+<div class="footer">
+
+Generated from publicly available court records.
+<p>
+For corrections, updates or removal requests:
+<a href="mailto:admin@kingshabh.com">
+admin@kingshabh.com
+</a>
+</p>
+<br><br>
+
+<a href="sitemap.xml">Sitemap</a>
+&nbsp;•&nbsp;
+<a href="robots.txt">Robots</a>
+
+</div>
+
+</div>
+
+<script>
+
+let advocates = [];
+
+fetch("search-index.json")
+.then(r => r.json())
+.then(data => {
+    advocates = data;
+});
+
+const search =
+document.getElementById("search");
+
+const results =
+document.getElementById("results");
+
+search.addEventListener(
+    "input",
+    () => {
+
+        const q =
+        search.value
+        .trim()
+        .toLowerCase();
+
+        results.innerHTML = "";
+
+        if(q.length < 2){
+            return;
+        }
+
+        advocates
+        .filter(x =>
+            x.name.toLowerCase().includes(q)
+            ||
+            x.roll.toLowerCase().includes(q)
+        )
+        .slice(0,20)
+        .forEach(x => {
+
+            const div =
+            document.createElement("div");
+
+            div.className =
+            "result";
+
+            div.innerHTML =
+            `
+            <a href="${x.file}">
+                ${x.name}
+            </a>
+
+            <small>
+                ${x.roll}
+            </small>
+            `;
+
+            results.appendChild(div);
+
+        });
+
+    }
+);
+
+</script>
+
+</body>
+</html>
